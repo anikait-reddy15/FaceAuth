@@ -90,8 +90,8 @@ Ensure your system meets the following requirements before installation:
 2.  **Create a Virtual Environment**
     It is highly recommended to use a virtual environment to avoid dependency conflicts.
     ```cmd
-    python -m venv model.venv
-    model.venv\Scripts\activate
+    python -m venv .venv
+    .venv\Scripts\activate
     ```
 
 3.  **Install Dependencies**
@@ -116,23 +116,21 @@ The training script handles data loading, augmentation, and the training loop.
 python Model/train_final.py
 ```
 
-🧪 Testing & Usage
+## 🧪 Testing & Usage
 
 We use a real-time verification script that utilizes **OpenCV** to capture live video and compare it against a captured anchor.
 
 **Run the Test:**
 ```cmd
-python real_time_test.py
+python real_time_test_v2.py
 ```
 Controls
 
-*Press A: Capture your Anchor face (The reference identity).
+* **Press A: Capture your Anchor face (The reference identity).
+* **Press T: Capture a Test face (The face to verify).
+* **Press Esc or Q: Quit the application.
 
-*Press T: Capture a Test face (The face to verify).
-
-*Press Esc or Q: Quit the application.
-
-📊 Performance & Results
+## 📊 Performance & Results
 
 Based on extensive testing with the Sigmoid activation model and Margin=1.0:
 
@@ -141,10 +139,8 @@ Based on extensive testing with the Sigmoid activation model and Margin=1.0:
 | **Same Person** | 0.00 - 0.30 | ✅ MATCH |
 | **Different Person** | 0.31 - 1.50+ | ❌ NO MATCH |
 
-🔮 Future Scope
+## 🔮 Future Scope
 
-*Liveness Detection: Implement "Blink Detection" or "Head Pose Estimation" to prevent photo spoofing attacks (where a user holds up a photo of the authorized person).
-
-*Database Integration: Replace the manual "Anchor" capture with a persistent SQL/MongoDB database of user embeddings.
-
-*Frontend UI: Develop a user-friendly frontend using React or Electron for a seamless login experience.
+* **Liveness Detection: Implement "Blink Detection" or "Head Pose Estimation" to prevent photo spoofing attacks (where a user holds up a photo of the authorized person).
+* **Database Integration: Replace the manual "Anchor" capture with a persistent SQL/MongoDB database of user embeddings.
+* **Frontend UI: Develop a user-friendly frontend using React or Electron for a seamless login experience.
