@@ -4,13 +4,13 @@ import cv2
 import os
 
 # --- Configuration ---
-MODEL_PATH = r"C:\Projects\FaceAuth\faceauth_model_128d.h5"
+MODEL_PATH = r"C:\Projects\FaceAuth\faceauth_model_128d_v1.h5"
 INPUT_SHAPE = (100, 100) # Must match the input shape used for training
 # We use this threshold to decide if two faces are the same or different.
 # If Distance < THRESHOLD: SAME PERSON
 # If Distance >= THRESHOLD: DIFFERENT PERSON
 # For Triplet Loss (margin=0.5), a good starting threshold is 0.7-0.9
-DISTANCE_THRESHOLD = 0.7
+DISTANCE_THRESHOLD = 0.15
 
 # --- Helper Functions ---
 
