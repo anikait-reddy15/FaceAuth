@@ -4,16 +4,17 @@ import cv2
 import os
 
 # --- Configuration ---
+# NOTE: Ensure this filename matches exactly what you have in your folder
 MODEL_PATH = "faceauth_model_128d_v2.h5" 
 
 # Must match the input shape used for training
 INPUT_SHAPE = (100, 100) 
 
 # --- THRESHOLD EXPLAINED (Sigmoid Model) ---
+# Since we used activation='sigmoid' and margin=1.0: 
 # - Same Person distance is usually: 0.0 to 0.3
 # - Different Person distance is usually: 0.8 to 2.0+
-# Therefore, 0.5 is a perfect "Cutoff" point.
-DISTANCE_THRESHOLD = 0.5
+DISTANCE_THRESHOLD = 0.3
 
 # --- Helper Functions ---
 
@@ -21,7 +22,6 @@ def load_embedding_model():
     """Loads the trained Keras model."""
     if not os.path.exists(MODEL_PATH):
         print(f"ERROR: Model file not found at '{MODEL_PATH}'.")
-        print("Did you run train_final.py to generate it?")
         exit()
         
     try:
@@ -36,13 +36,17 @@ def load_embedding_model():
 
 def preprocess_face(face_image):
     """Resizes and normalizes the face image for the model."""
-    # 1. Resize to 100x100 
+    # 1. CONVERT BGR to RGB (Critical Fix)
+    # OpenCV captures in BGR, but model trained on RGB.
+    face_image = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
+    
+    # 2. Resize to 100x100 
     face_image = cv2.resize(face_image, INPUT_SHAPE)
     
-    # 2. Convert to float32 and normalize to 0-1
+    # 3. Convert to float32 and normalize to 0-1
     face_array = np.asarray(face_image).astype('float32') / 255.0
     
-    # 3. Expand dimensions to fit model input: (1, 100, 100, 3)
+    # 4. Expand dimensions to fit model input: (1, 100, 100, 3)
     return np.expand_dims(face_array, axis=0)
 
 def detect_face(frame):
@@ -84,7 +88,7 @@ def real_time_test():
     print(f"Threshold set to: {DISTANCE_THRESHOLD}")
     print("1. Press 'A' to capture ANCHOR (You).")
     print("2. Press 'T' to capture TEST (To verify).")
-    print("3. Press 'Q' to quit.")
+    print("3. Press 'Esc' to quit.")
 
     while True:
         ret, frame = cap.read()
@@ -113,7 +117,7 @@ def real_time_test():
                 result_text = "NO MATCH (LOCKED)"
                 result_color = (0, 0, 255) # Red
             
-            # Display results
+            # Display results on Screen
             cv2.putText(frame, f"Diff: {distance:.4f}", (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
             cv2.putText(frame, result_text, (20, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.8, result_color, 2)
 
@@ -122,8 +126,13 @@ def real_time_test():
         
         # Controls
         key = cv2.waitKey(1) & 0xFF
-        if key == ord('q'):
+        
+        # --- EXIT CONDITION UPDATED ---
+        # 27 is the ASCII code for ESC
+        if key == 27 or key == ord('q'):
+            print("\nExiting...")
             break
+            
         elif key == ord('a'):
             if face_img.size > 0:
                 # Capture Anchor
@@ -131,14 +140,21 @@ def real_time_test():
                 anchor_embedding = embedding_model.predict(processed, verbose=0)[0]
                 current_mode = "TEST"
                 test_embedding = None
-                print("Anchor Captured.")
+                print("\n--> Anchor Captured.")
+        
         elif key == ord('t'):
             if face_img.size > 0:
                 # Capture Test
                 processed = preprocess_face(face_img)
                 test_embedding = embedding_model.predict(processed, verbose=0)[0]
-                # Keep mode as TEST so you can keep spamming 'T' to test different angles
-                print("Test Captured.")
+                
+                # --- NEW PRINT LOGIC ---
+                if anchor_embedding is not None:
+                    dist = calculate_distance(anchor_embedding, test_embedding)
+                    result = "MATCH" if dist < DISTANCE_THRESHOLD else "NO MATCH"
+                    print(f"--> Test Captured. Distance: {dist:.4f} ({result})")
+                else:
+                    print("--> Test Captured. (Please capture Anchor first)")
 
     cap.release()
     cv2.destroyAllWindows()
