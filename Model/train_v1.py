@@ -4,7 +4,7 @@ import os
 
 # Import your custom modules
 from dataset_generator import LFWTripletGenerator
-from model import make_embedding_model, SiameseModel
+from model_v1 import make_embedding_model, SiameseModel
 
 # --- CONFIGURATION ---
 LFW_PATH = r"C:\Projects\FaceAuth\Model\Datasets\lfw-deepfunneled"
