@@ -1,0 +1,13 @@
+# FaceAuth Dependencies
+
+# Deep Learning Core (Last version with native Windows GPU support)
+tensorflow==2.10.1
+keras==2.10.0
+
+# Computer Vision & Image Processing
+opencv-python>=4.6.0
+numpy>=1.21.0
+matplotlib>=3.5.0
+
+# GPU Support (Optional but recommended)
+# Note: CUDA 11.2 and cuDNN 8.1 must be installed manually on the system.
