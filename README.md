@@ -124,11 +124,11 @@ We use a real-time verification script that utilizes **OpenCV** to capture live 
 ```cmd
 python real_time_test_v2.py
 ```
-Controls
+**Controls**
 
-* **Press A: Capture your Anchor face (The reference identity).
-* **Press T: Capture a Test face (The face to verify).
-* **Press Esc or Q: Quit the application.
+* **Press A:** Capture your Anchor face (The reference identity).
+* **Press T:** Capture a Test face (The face to verify).
+* **Press Esc or Q:** Quit the application.
 
 ## 📊 Performance & Results
 
@@ -141,6 +141,6 @@ Based on extensive testing with the Sigmoid activation model and Margin=1.0:
 
 ## 🔮 Future Scope
 
-* **Liveness Detection: Implement "Blink Detection" or "Head Pose Estimation" to prevent photo spoofing attacks (where a user holds up a photo of the authorized person).
-* **Database Integration: Replace the manual "Anchor" capture with a persistent SQL/MongoDB database of user embeddings.
-* **Frontend UI: Develop a user-friendly frontend using React or Electron for a seamless login experience.
+* **Liveness Detection:** Implement "Blink Detection" or "Head Pose Estimation" to prevent photo spoofing attacks (where a user holds up a photo of the authorized person).
+* **Database Integration:** Replace the manual "Anchor" capture with a persistent SQL/MongoDB database of user embeddings.
+* **Frontend UI:** Develop a user-friendly frontend using React or Electron for a seamless login experience.
