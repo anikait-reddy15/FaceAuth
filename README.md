@@ -42,7 +42,7 @@ The model trains on "Triplets" of images:
 **The Goal:** Minimize the distance between $(A, P)$ and maximize the distance between $(A, N)$.
 
 ### 2. The Embedding Model ("The Brain")
-We designed a custom VGG-style Convolutional Network optimized for the **RTX 3060 Laptop GPU**:
+We designed a custom VGG-style Convolutional Network on an **RTX 3060 Laptop GPU**:
 
 * **Input Layer:** 100x100x3 RGB Images.
 * **Convolutional Blocks:** 4 blocks of Conv2D (filters: 64 $\to$ 128 $\to$ 256 $\to$ 256) with ReLU activation and Max Pooling.
